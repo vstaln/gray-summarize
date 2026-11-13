@@ -30,6 +30,7 @@ fn manifest() -> Value {
         "tools": [],
         "description": "summarize the conversation with a model",
         "commands": ["/summarize"],
+        "command_descriptions": {"/summarize": "summarize the conversation so far"},
         "hooks": ["context/build"],
         "capabilities": ["host.turn"],
     })
