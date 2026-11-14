@@ -28,7 +28,7 @@ fn manifest() -> Value {
         "version": env!("CARGO_PKG_VERSION"),
         "protocol": "2.0",
         "tools": [],
-        "description": "summarize",
+        "description": "summarize the conversation with a model",
         "commands": ["/summarize"],
         "hooks": ["context/build"],
         "capabilities": ["host.turn"],
