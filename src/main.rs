@@ -60,10 +60,7 @@ fn host_run(link: Option<&HostLink>, prompt: &str) -> Result<String, String> {
     };
     let id = next_id(&link.counter);
     let (tx, rx) = mpsc::channel();
-    link.pending
-        .lock()
-        .expect("pending")
-        .insert(id.clone(), tx);
+    link.pending.lock().expect("pending").insert(id.clone(), tx);
     let req = json!({"id": id, "method": "host/run", "params": {"prompt": prompt}});
     {
         let mut o = link.out.lock().expect("stdout");
@@ -119,7 +116,10 @@ fn truncate_for_summary(text: &str, max_chars: usize) -> String {
         return text.to_string();
     }
     let kept: String = text.chars().take(max_chars).collect();
-    format!("{kept}\n\n[... {} more characters truncated]", n - max_chars)
+    format!(
+        "{kept}\n\n[... {} more characters truncated]",
+        n - max_chars
+    )
 }
 
 /// `[Message]` values → `[Role]: ...` text; pi's summarize.ts emits
@@ -236,7 +236,10 @@ fn cache_write(sid: &str, text: &str) {
         while start < bytes.len() && !text.is_char_boundary(start) {
             start += 1;
         }
-        format!("[... earlier conversation truncated ...]\n\n{}", &text[start..])
+        format!(
+            "[... earlier conversation truncated ...]\n\n{}",
+            &text[start..]
+        )
     } else {
         text.to_string()
     };
@@ -364,9 +367,12 @@ mod tests {
     use super::*;
 
     fn call(method: &str, params: Value) -> Value {
-        handle(&json!({ "id": 1, "method": method, "params": params }), None)
-            .0
-            .unwrap()
+        handle(
+            &json!({ "id": 1, "method": method, "params": params }),
+            None,
+        )
+        .0
+        .unwrap()
     }
 
     #[test]
